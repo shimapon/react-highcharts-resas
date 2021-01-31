@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import apiKey from "../../apiKey";
 import { population, prefectures } from "../../data";
+import CheckCard from "../molecules/CheckCard";
+import CheckField from "../organisms/CheckField";
 import Graph from "../organisms/Graph";
 
 const Main: React.FC = () => {
@@ -17,10 +19,7 @@ const Main: React.FC = () => {
 
   return (
     <>
-      <div>{apiKey}</div>
-      <div>
-        <Graph />
-      </div>
+      <CheckField prefectures={prefectures} />
     </>
   );
 };
