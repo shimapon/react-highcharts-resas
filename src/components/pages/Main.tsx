@@ -6,20 +6,21 @@ import CheckField from "../organisms/CheckField";
 import Graph from "../organisms/Graph";
 
 const Main: React.FC = () => {
+  const labels = ["埼玉県", "千葉県"];
+
   const [count, setCount] = useState(0);
   const [value, setValue] = useState("initial");
 
   console.log(population, prefectures);
 
   useEffect(() => {
-    // この副作用は変数valueを使う
-    // そのためvalueに依存している
     console.log(value);
-  }, [value]); // 依存関係としてvalueを渡す
+  }, [value]);
 
   return (
     <>
       <CheckField prefectures={prefectures} />
+      <Graph population={population} labels={labels} />
     </>
   );
 };

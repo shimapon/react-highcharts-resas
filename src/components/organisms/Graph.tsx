@@ -6,32 +6,92 @@ import HighchartsReact from "highcharts-react-official";
 // namespace for the related Props interface (HighchartsReact.Props). All other
 // interfaces like Options come from the Highcharts module itself.
 
-const styles: { [key: string]: React.CSSProperties } = {
+const Styles: { [key: string]: React.CSSProperties } = {
   graph: {
-    width: "50%",
+    padding: "10px",
   },
+};
+
+type Props = {
+  population: {
+    message: null;
+    result: {
+      boundaryYear: number;
+      data: (
+        | {
+            label: string;
+            data: {
+              year: number;
+              value: number;
+            }[];
+          }
+        | {
+            label: string;
+            data: {
+              year: number;
+              value: number;
+              rate: number;
+            }[];
+          }
+      )[];
+    };
+  }[];
+  labels: string[];
 };
 
 const options: Highcharts.Options = {
   title: {
-    text: "My chart",
+    text: "総人口推移",
   },
-  series: [
-    {
-      type: "line",
-      data: [1, 2, 3],
+  xAxis: {
+    title: {
+      text: "年度",
     },
-  ],
+  },
+  yAxis: {
+    title: {
+      text: "人口数",
+    },
+  },
 };
 
-// React supports function components as a simple way to write components that
-// only contain a render method without any state (the App component in this
-// example).
+const Graph: React.FC<Props> = ({ population, labels }) => {
+  let i = 0;
 
-const Graph = (props: HighchartsReact.Props) => (
-  <div style={styles.graph}>
-    <HighchartsReact highcharts={Highcharts} options={options} {...props} />
-  </div>
-);
+  let series: any;
+
+  let s = [];
+
+  for (let p of population) {
+    let data = [];
+    let categories = [];
+
+    for (let num_population of p.result.data[0].data) {
+      data.push(num_population.value);
+      categories.push(String(num_population.year));
+    }
+
+    s.push({
+      type: "line",
+      name: labels[i],
+      data: data,
+    });
+
+    options["xAxis"] = {
+      categories: categories,
+    };
+    i++;
+  }
+
+  series = s;
+
+  options["series"] = series;
+
+  return (
+    <div style={Styles.graph}>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
+};
 
 export default Graph;
