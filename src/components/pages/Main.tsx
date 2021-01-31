@@ -11,15 +11,43 @@ const Main: React.FC = () => {
   const [count, setCount] = useState(0);
   const [value, setValue] = useState("initial");
 
+  let typeA: string[];
+
+  typeA = [];
+
+  const [prefNames, setPrefNames] = useState(typeA);
+
   console.log(population, prefectures);
 
   useEffect(() => {
     console.log(value);
   }, [value]);
 
+  const handleClickCheck = (
+    prefName: string,
+    prefCode: number,
+    check: boolean
+  ) => {
+    console.log(prefName, prefCode, check);
+
+    let c_prefNames = prefNames;
+
+    if (check) {
+      c_prefNames.push(prefName);
+    } else {
+      var idx = c_prefNames.indexOf(prefName);
+      if (idx >= 0) {
+        c_prefNames.splice(idx, 1);
+      }
+    }
+    setPrefNames(c_prefNames);
+
+    console.log(prefNames);
+  };
+
   return (
     <>
-      <CheckField prefectures={prefectures} />
+      <CheckField prefectures={prefectures} onChange={handleClickCheck} />
       <Graph population={population} labels={labels} />
     </>
   );
