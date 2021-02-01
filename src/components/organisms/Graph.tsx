@@ -2,10 +2,6 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-// The wrapper exports only a default component class that at the same time is a
-// namespace for the related Props interface (HighchartsReact.Props). All other
-// interfaces like Options come from the Highcharts module itself.
-
 const Styles: { [key: string]: React.CSSProperties } = {
   graph: {
     padding: "10px",
@@ -13,79 +9,51 @@ const Styles: { [key: string]: React.CSSProperties } = {
 };
 
 type Props = {
-  population: {
-    message: null;
-    result: {
-      boundaryYear: number;
-      data: (
-        | {
-            label: string;
-            data: {
-              year: number;
-              value: number;
-            }[];
-          }
-        | {
-            label: string;
-            data: {
-              year: number;
-              value: number;
-              rate: number;
-            }[];
-          }
-      )[];
-    };
+  populationdata: {
+    prefName: string;
+    data: { year: number; value: number }[];
   }[];
-  labels: string[];
 };
 
-const options: Highcharts.Options = {
-  title: {
-    text: "総人口推移",
-  },
-  xAxis: {
-    title: {
-      text: "年度",
-    },
-  },
-  yAxis: {
-    title: {
-      text: "人口数",
-    },
-  },
-};
+const Graph: React.FC<Props> = ({ populationdata }) => {
+  console.log(populationdata);
 
-const Graph: React.FC<Props> = ({ population, labels }) => {
-  let i = 0;
+  let series: Highcharts.SeriesOptionsType[] = [];
+  let categories = [];
 
-  let series: any;
-
-  let s = [];
-
-  for (let p of population) {
+  for (let p of populationdata) {
     let data = [];
-    let categories = [];
 
-    for (let num_population of p.result.data[0].data) {
-      data.push(num_population.value);
-      categories.push(String(num_population.year));
+    for (let pd of p.data) {
+      data.push(pd.value);
+      categories.push(String(pd.year));
     }
 
-    s.push({
+    series.push({
       type: "line",
-      name: labels[i],
+      name: p.prefName,
       data: data,
     });
-
-    options["xAxis"] = {
-      categories: categories,
-    };
-    i++;
   }
 
-  series = s;
-
-  options["series"] = series;
+  const options: Highcharts.Options = {
+    title: {
+      text: "総人口推移",
+    },
+    xAxis: {
+      title: {
+        text: "年度",
+      },
+      categories: categories,
+    },
+    yAxis: {
+      title: {
+        text: "人口数",
+      },
+    },
+    series:
+      series.length === 0 ? [{ type: "line", name: "都道府県名" }] : series,
+  };
 
   return (
     <div style={Styles.graph}>
