@@ -1,26 +1,44 @@
 import React, { useEffect, useState } from "react";
 import apiKey from "../../apiKey";
-import { population, prefectures } from "../../data";
-import CheckCard from "../molecules/CheckCard";
+import { population } from "../../data";
 import CheckField from "../organisms/CheckField";
 import Graph from "../organisms/Graph";
+
+import axios from "axios";
 
 const Main: React.FC = () => {
   const labels = ["埼玉県", "千葉県"];
 
-  const [count, setCount] = useState(0);
   const [value, setValue] = useState("initial");
 
   let typeA: string[];
+  let typeB: any;
 
   typeA = [];
+  typeB = {};
 
   const [prefNames, setPrefNames] = useState(typeA);
 
-  console.log(population, prefectures);
+  const [prefectures, setPreFectures] = useState(null);
+
+  console.log(population);
 
   useEffect(() => {
+    // 一度だけ実行
     console.log(value);
+
+    axios
+      .get("https://opendata.resas-portal.go.jp/api/v1/prefectures", {
+        headers: { "X-API-KEY": apiKey },
+      })
+      .then((results) => {
+        console.log(results.data);
+        setPreFectures(results.data);
+      })
+      .catch((error) => {
+        console.log("通信失敗");
+        console.log(error.status);
+      });
   }, [value]);
 
   const handleClickCheck = (
