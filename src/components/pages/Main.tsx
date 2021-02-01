@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from "react";
 import apiKey from "../../apiKey";
-import { population } from "../../data";
 import CheckField from "../organisms/CheckField";
 import Graph from "../organisms/Graph";
 
 import axios from "axios";
 
 const Main: React.FC = () => {
-  const labels = ["埼玉県", "千葉県"];
-
-  const [value, setValue] = useState("initial");
-
-  let typeA: string[];
-  let typeB: any;
-
-  typeA = [];
-  typeB = {};
-
-  const [prefNames, setPrefNames] = useState(typeA);
-
+  const [value] = useState("initial");
   const [prefectures, setPreFectures] = useState(null);
-
-  console.log(population);
+  const [prefPopulation, setPrefPopulation] = useState<
+    { prefName: string; data: { year: number; value: number }[] }[]
+  >([]);
 
   useEffect(() => {
     // 一度だけ実行
@@ -46,27 +35,45 @@ const Main: React.FC = () => {
     prefCode: number,
     check: boolean
   ) => {
-    console.log(prefName, prefCode, check);
-
-    let c_prefNames = prefNames;
+    let c_prefPopulation = prefPopulation.slice();
 
     if (check) {
-      c_prefNames.push(prefName);
-    } else {
-      var idx = c_prefNames.indexOf(prefName);
-      if (idx >= 0) {
-        c_prefNames.splice(idx, 1);
-      }
-    }
-    setPrefNames(c_prefNames);
+      axios
+        .get(
+          "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=" +
+            String(prefCode),
+          {
+            headers: { "X-API-KEY": apiKey },
+          }
+        )
+        .then((results) => {
+          console.log(results.data);
 
-    console.log(prefNames);
+          c_prefPopulation.push({
+            prefName: prefName,
+            data: results.data.result.data[0].data,
+          });
+
+          setPrefPopulation(c_prefPopulation);
+        })
+        .catch((error) => {
+          console.log("通信失敗");
+          console.log(error.status);
+          return;
+        });
+    } else {
+      const deleteIndex = c_prefPopulation.findIndex(
+        (value) => value.prefName === prefName
+      );
+      c_prefPopulation.splice(deleteIndex, 1);
+      setPrefPopulation(c_prefPopulation);
+    }
   };
 
   return (
     <>
       <CheckField prefectures={prefectures} onChange={handleClickCheck} />
-      <Graph population={population} labels={labels} />
+      <Graph populationdata={prefPopulation} />
     </>
   );
 };
