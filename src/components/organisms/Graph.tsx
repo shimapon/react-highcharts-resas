@@ -52,7 +52,9 @@ const Graph: React.FC<Props> = ({ populationdata }) => {
       },
     },
     series:
-      series.length === 0 ? [{ type: "line", name: "都道府県名" }] : series,
+      series.length === 0
+        ? [{ type: "line", name: "都道府県名", data: [] }]
+        : series,
   };
 
   return (

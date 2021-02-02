@@ -38,6 +38,12 @@ const Main: React.FC = () => {
     let c_prefPopulation = prefPopulation.slice();
 
     if (check) {
+      if (
+        c_prefPopulation.findIndex((value) => value.prefName === prefName) !==
+        -1
+      )
+        return;
+
       axios
         .get(
           "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=" +
@@ -65,6 +71,7 @@ const Main: React.FC = () => {
       const deleteIndex = c_prefPopulation.findIndex(
         (value) => value.prefName === prefName
       );
+      if (deleteIndex === -1) return;
       c_prefPopulation.splice(deleteIndex, 1);
       setPrefPopulation(c_prefPopulation);
     }
