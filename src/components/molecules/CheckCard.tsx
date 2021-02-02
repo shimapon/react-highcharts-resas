@@ -10,15 +10,21 @@ type Props = {
 
 const Styles: { [key: string]: React.CSSProperties } = {
   text: { display: "contents", marginLeft: "1em" },
-  checkcard: { width: "100px" },
+  checkcard: {
+    borderRadius: "25px",
+    border: "solid 2px",
+    textAlign: "center",
+    padding: "5px",
+    cursor: "pointer",
+  },
 };
 
 const CheckCard: React.FC<Props> = ({ name, prefName, onChange }) => {
   return (
-    <div style={Styles.checkcard}>
+    <label style={Styles.checkcard}>
       <CheckBox prefName={prefName} name={name} onChange={onChange} />
-      <Text text={name} style={Styles.text} />
-    </div>
+      <Text text={name.length === 3 ? "　" + name : name} style={Styles.text} />
+    </label>
   );
 };
 
