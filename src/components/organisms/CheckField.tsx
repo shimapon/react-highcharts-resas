@@ -22,7 +22,9 @@ const Styles: { [key: string]: React.CSSProperties } = {
   },
   label: {
     fontSize: "20px",
-    padding: "0 10px",
+    padding: "0.5rem 2rem",
+    borderLeft: "4px solid #000",
+    marginLeft: "10pt",
   },
   checkcard: {
     margin: "8px",

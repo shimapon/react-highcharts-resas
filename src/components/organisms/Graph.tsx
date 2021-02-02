@@ -1,10 +1,17 @@
 import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import Text from "../atoms/Text";
 
 const Styles: { [key: string]: React.CSSProperties } = {
   graph: {
     padding: "10px",
+  },
+  label: {
+    fontSize: "20px",
+    padding: "0.5rem 2rem",
+    borderLeft: "4px solid #000",
+    marginLeft: "10pt",
   },
 };
 
@@ -59,6 +66,7 @@ const Graph: React.FC<Props> = ({ populationdata }) => {
 
   return (
     <div style={Styles.graph}>
+      <Text style={Styles.label} text="人口推移グラフ" />
       <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   );
