@@ -22,9 +22,8 @@ type Props = {
   }[];
 };
 
+// 選んだ都道府県の人口推移グラフを表示するコンポーネント
 const Graph: React.FC<Props> = ({ populationdata }) => {
-  console.log(populationdata);
-
   let series: Highcharts.SeriesOptionsType[] = [];
   let categories = [];
 
@@ -58,6 +57,7 @@ const Graph: React.FC<Props> = ({ populationdata }) => {
         text: "人口数",
       },
     },
+    // 都道府県を一つも選んでいない場合との分岐条件
     series:
       series.length === 0
         ? [{ type: "line", name: "都道府県名", data: [] }]

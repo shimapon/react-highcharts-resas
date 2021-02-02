@@ -14,22 +14,19 @@ const Main: React.FC = () => {
 
   useEffect(() => {
     // 一度だけ実行
-    console.log(value);
 
+    // 都道府県一覧を取得する
     axios
       .get("https://opendata.resas-portal.go.jp/api/v1/prefectures", {
         headers: { "X-API-KEY": apiKey },
       })
       .then((results) => {
-        console.log(results.data);
         setPreFectures(results.data);
       })
-      .catch((error) => {
-        console.log("通信失敗");
-        console.log(error.status);
-      });
+      .catch((error) => {});
   }, [value]);
 
+  // チェックボックスをクリックした際の処理
   const handleClickCheck = (
     prefName: string,
     prefCode: number,
@@ -37,6 +34,7 @@ const Main: React.FC = () => {
   ) => {
     let c_prefPopulation = prefPopulation.slice();
 
+    // チェックをつけた処理
     if (check) {
       if (
         c_prefPopulation.findIndex((value) => value.prefName === prefName) !==
@@ -53,8 +51,6 @@ const Main: React.FC = () => {
           }
         )
         .then((results) => {
-          console.log(results.data);
-
           c_prefPopulation.push({
             prefName: prefName,
             data: results.data.result.data[0].data,
@@ -63,11 +59,11 @@ const Main: React.FC = () => {
           setPrefPopulation(c_prefPopulation);
         })
         .catch((error) => {
-          console.log("通信失敗");
-          console.log(error.status);
           return;
         });
-    } else {
+    }
+    // チェックを外した処理
+    else {
       const deleteIndex = c_prefPopulation.findIndex(
         (value) => value.prefName === prefName
       );

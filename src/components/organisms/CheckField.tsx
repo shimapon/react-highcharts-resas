@@ -32,8 +32,6 @@ const Styles: { [key: string]: React.CSSProperties } = {
 };
 
 const CheckField: React.FC<Props> = ({ prefectures, onChange }) => {
-  console.log(prefectures);
-
   return (
     <>
       <Text style={Styles.label} text="都道府県" />
