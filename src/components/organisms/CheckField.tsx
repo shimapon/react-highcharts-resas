@@ -24,6 +24,9 @@ const Styles: { [key: string]: React.CSSProperties } = {
     fontSize: "20px",
     padding: "0 10px",
   },
+  checkcard: {
+    margin: "8px",
+  },
 };
 
 const CheckField: React.FC<Props> = ({ prefectures, onChange }) => {
@@ -38,12 +41,13 @@ const CheckField: React.FC<Props> = ({ prefectures, onChange }) => {
       ) : (
         <div style={Styles.checkcardList}>
           {prefectures.result.map((prefecture) => (
-            <CheckCard
-              name={prefecture.prefName}
-              key={prefecture.prefName}
-              prefName={prefecture.prefCode}
-              onChange={onChange}
-            />
+            <div style={Styles.checkcard} key={prefecture.prefName}>
+              <CheckCard
+                name={prefecture.prefName}
+                prefName={prefecture.prefCode}
+                onChange={onChange}
+              />
+            </div>
           ))}
         </div>
       )}
